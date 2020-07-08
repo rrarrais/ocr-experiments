@@ -3,7 +3,13 @@ import pytesseract as ocr
 from PIL import Image
 
 
-#Consegui ler uns comando básico do tipo "liga" ou "desliga", e "esquerda" ou "direita", mas tá bem ruim e instável
+#Tesseract reading in Portuguese!; 
+    #Download portuguese or others trained data(https://tesseract-ocr.github.io/tessdoc/Data-Files);
+    #to install, first do "sudo find / -name 'tessdata'" (Ubuntu 20.04) to find the right folder
+    #do "sudo cp -r por.traineddata tessdata_folder", In my case it was: 
+    #"sudo cp -r por.traineddata /usr/share/tesseract-ocr/4.00/tessdata";
+
+#It can read some simple handmade texts shown in the webcam, stills kinda unstable
 
 video = cv2.VideoCapture(0)
 img_counter = 0
@@ -14,23 +20,18 @@ while True:
 
     check, frame = video.read()
 
-    #Tesseract lendo texto, em Português!; 
-    #Baixar o trained data em ptbr (https://tesseract-ocr.github.io/tessdoc/Data-Files);
-    #Caso não saiba onde, dá um "sudo find / -name "tessdata" (Ubuntu 20.04) para achar a pasta onde tem que instalar a 
-    #trained data em ptbr;
-    #aí só dar um "sudo cp -r por.traineddata pasta do tessdata" No meu caso foi: 
-    #"sudo cp -r por.traineddata /usr/share/tesseract-ocr/4.00/tessdata";
+    
 
     phrase = ocr.image_to_string(frame, lang='por')
 
     
-    #colocando o que foi lido no video recebido da webcam
+    #Put the text read on the webcam 
     cv2.putText(frame, phrase, (200, 400), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255))
 
-    #criação da janela
+    #Windows creation
     cv2.imshow("Main frame thing", frame)
 
-    #criação da trackbar
+    #Trackbar creation
     key = cv2.waitKey(1)
 
     if key == ord('q'):
